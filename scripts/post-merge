@@ -1,0 +1,15 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Runs NPM Install if the latest commit has a package.json change.
+
+# Get the latest committed file names
+files="$(git diff-tree -r --name-only --no-commit-id ORIG_HEAD HEAD)"
+
+check() {
+    # Check if the files contain package.json
+    # If so, run npm install
+    echo "$files" | grep --quiet "package.json" && eval "npm install"
+}
+
+check
